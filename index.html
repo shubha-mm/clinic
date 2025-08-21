@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediCare Pro - Clinic Management System</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <h1>MediCare Pro</h1>
+                    </div>
+                    <p>Clinic Management System</p>
+                </div>
+                <form id="loginForm" class="login-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" required>
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="form-options">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-loading" style="display: none;">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <p>Demo Credentials: admin@clinic.com / admin123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>MediCare Pro</span>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-section="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="menu-item" data-section="appointments">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Appointments</span>
+                </li>
+                <li class="menu-item" data-section="patients">
+                    <i class="fas fa-users"></i>
+                    <span>Patients</span>
+                </li>
+                <li class="menu-item" data-section="billing">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                    <span>Billing</span>
+                </li>
+                <li class="menu-item" data-section="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Reports</span>
+                </li>
+                <li class="menu-item" data-section="staff">
+                    <i class="fas fa-user-md"></i>
+                    <span>Staff</span>
+                </li>
+                <li class="menu-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name">Dr. Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-left">
+                    <button class="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="breadcrumb">
+                        <span id="currentSection">Dashboard</span>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search patients, appointments...">
+                    </div>
+                    <div class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="dashboard-header">
+                        <h2>Dashboard Overview</h2>
+                        <div class="date-filter">
+                            <select id="dateRange">
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="month" selected>This Month</option>
+                                <option value="year">This Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon patients">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Patients</h3>
+                                <p class="stat-number">1,247</p>
+                                <span class="stat-change positive">+12% from last month</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon appointments">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Today's Appointments</h3>
+                                <p class="stat-number">28</p>
+                                <span class="stat-change neutral">3 pending confirmations</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon revenue">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Monthly Revenue</h3>
+                                <p class="stat-number">₹45,720</p>
+                                <span class="stat-change positive">+8% from last month</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon staff">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Active Staff</h3>
+                                <p class="stat-number">15</p>
+                                <span class="stat-change neutral">All available today</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-charts">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3>Appointment Trends</h3>
+                                <div class="chart-filters">
+                                    <button class="chart-filter active" data-period="week">Week</button>
+                                    <button class="chart-filter" data-period="month">Month</button>
+                                    <button class="chart-filter" data-period="year">Year</button>
+                                </div>
+                            </div>
+                            <canvas id="appointmentChart"></canvas>
+                        </div>
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3>Revenue Analysis</h3>
+                            </div>
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-bottom">
+                        <div class="recent-appointments">
+                            <h3>Today's Appointments</h3>
+                            <div class="appointment-list">
+                                <div class="appointment-item">
+                                    <div class="appointment-time">09:00 AM</div>
+                                    <div class="appointment-info">
+                                        <p class="patient-name">John Smith</p>
+                                        <p class="appointment-type">General Checkup</p>
+                                    </div>
+                                    <div class="appointment-doctor">Dr. Johnson</div>
+                                    <div class="appointment-status confirmed">Confirmed</div>
+                                </div>
+                                <div class="appointment-item">
+                                    <div class="appointment-time">10:30 AM</div>
+                                    <div class="appointment-info">
+                                        <p class="patient-name">Sarah Wilson</p>
+                                        <p class="appointment-type">Cardiology</p>
+                                    </div>
+                                    <div class="appointment-doctor">Dr. Brown</div>
+                                    <div class="appointment-status pending">Pending</div>
+                                </div>
+                                <div class="appointment-item">
+                                    <div class="appointment-time">02:00 PM</div>
+                                    <div class="appointment-info">
+                                        <p class="patient-name">Mike Davis</p>
+                                        <p class="appointment-type">Dermatology</p>
+                                    </div>
+                                    <div class="appointment-doctor">Dr. Taylor</div>
+                                    <div class="appointment-status confirmed">Confirmed</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quick-actions">
+                            <h3>Quick Actions</h3>
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="showSection('appointments')">
+                                    <i class="fas fa-plus"></i>
+                                    New Appointment
+                                </button>
+                                <button class="action-btn" onclick="showSection('patients')">
+                                    <i class="fas fa-user-plus"></i>
+                                    Add Patient
+                                </button>
+                                <button class="action-btn" onclick="showSection('billing')">
+                                    <i class="fas fa-file-invoice"></i>
+                                    Create Invoice
+                                </button>
+                                <button class="action-btn" onclick="showSection('reports')">
+                                    <i class="fas fa-download"></i>
+                                    Generate Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Appointments Section -->
+                <section id="appointments" class="content-section">
+                    <div class="section-header">
+                        <h2>Appointments Management</h2>
+                        <button class="primary-btn" onclick="openAppointmentModal()">
+                            <i class="fas fa-plus"></i>
+                            New Appointment
+                        </button>
+                    </div>
+                    
+                    <div class="appointments-filters">
+                        <div class="filter-group">
+                            <label>Date Range:</label>
+                            <input type="date" id="appointmentDateFrom">
+                            <span>to</span>
+                            <input type="date" id="appointmentDateTo">
+                        </div>
+                        <div class="filter-group">
+                            <label>Doctor:</label>
+                            <select id="doctorFilter">
+                                <option value="">All Doctors</option>
+                                <option value="dr-johnson">Dr. Johnson</option>
+                                <option value="dr-brown">Dr. Brown</option>
+                                <option value="dr-taylor">Dr. Taylor</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Status:</label>
+                            <select id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="confirmed">Confirmed</option>
+                                <option value="pending">Pending</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="appointments-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="appointmentsTableBody">
+                                <!-- Appointments will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Patients Section -->
+                <section id="patients" class="content-section">
+                    <div class="section-header">
+                        <h2>Patient Management</h2>
+                        <button class="primary-btn" onclick="openPatientModal()">
+                            <i class="fas fa-user-plus"></i>
+                            Add Patient
+                        </button>
+                    </div>
+                    
+                    <div class="patients-search">
+                        <div class="search-group">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="patientSearch" placeholder="Search by name, phone, or patient ID...">
+                        </div>
+                        <div class="filter-group">
+                            <select id="patientStatusFilter">
+                                <option value="">All Patients</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="patients-grid" id="patientsGrid">
+                        <!-- Patients will be populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Billing Section -->
+                <section id="billing" class="content-section">
+                    <div class="section-header">
+                        <h2>Billing & Invoices</h2>
+                        <button class="primary-btn" onclick="openInvoiceModal()">
+                            <i class="fas fa-file-invoice"></i>
+                            Create Invoice
+                        </button>
+                    </div>
+                    
+                    <div class="billing-stats">
+                        <div class="billing-stat">
+                            <h3>Total Outstanding</h3>
+                            <p class="amount outstanding">₹12,450</p>
+                        </div>
+                        <div class="billing-stat">
+                            <h3>Paid This Month</h3>
+                            <p class="amount paid">₹45,720</p>
+                        </div>
+                        <div class="billing-stat">
+                            <h3>Overdue</h3>
+                            <p class="amount overdue">₹3,200</p>
+                        </div>
+                    </div>
+
+                    <div class="billing-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Patient</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="billingTableBody">
+                                <!-- Billing records will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="content-section">
+                    <div class="section-header">
+                        <h2>Reports & Analytics</h2>
+                        <button class="primary-btn" onclick="generateReport()">
+                            <i class="fas fa-chart-line"></i>
+                            Generate Report
+                        </button>
+                    </div>
+                    
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <h3>Patient Demographics</h3>
+                            <canvas id="demographicsChart"></canvas>
+                            <button class="download-btn">Download PDF</button>
+                        </div>
+                        <div class="report-card">
+                            <h3>Revenue by Department</h3>
+                            <canvas id="departmentRevenueChart"></canvas>
+                            <button class="download-btn">Download PDF</button>
+                        </div>
+                        <div class="report-card">
+                            <h3>Appointment Statistics</h3>
+                            <canvas id="appointmentStatsChart"></canvas>
+                            <button class="download-btn">Download PDF</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Staff Section -->
+                <section id="staff" class="content-section">
+                    <div class="section-header">
+                        <h2>Staff Management</h2>
+                        <button class="primary-btn" onclick="openStaffModal()">
+                            <i class="fas fa-user-plus"></i>
+                            Add Staff
+                        </button>
+                    </div>
+                    
+                    <div class="staff-grid" id="staffGrid">
+                        <!-- Staff will be populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section">
+                    <div class="section-header">
+                        <h2>System Settings</h2>
+                    </div>
+                    
+                    <div class="settings-tabs">
+                        <button class="tab-btn active" data-tab="general">General</button>
+                        <button class="tab-btn" data-tab="security">Security</button>
+                        <button class="tab-btn" data-tab="notifications">Notifications</button>
+                        <button class="tab-btn" data-tab="backup">Backup</button>
+                    </div>
+
+                    <div class="settings-content">
+                        <div id="generalSettings" class="settings-panel active">
+                            <h3>General Settings</h3>
+                            <div class="settings-form">
+                                <div class="form-group">
+                                    <label>Clinic Name</label>
+                                    <input type="text" value="MediCare Pro Clinic">
+                                </div>
+                                <div class="form-group">
+                                    <label>Address</label>
+                                    <textarea>123 Healthcare Ave, Medical District, City 12345</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Phone</label>
+                                    <input type="tel" value="+1 (555) 123-4567">
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" value="info@medicareprp.com">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="appointmentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Appointment</h3>
+                <span class="close" onclick="closeModal('appointmentModal')">&times;</span>
+            </div>
+            <form id="appointmentForm" class="modal-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Patient</label>
+                        <select required>
+                            <option value="">Select Patient</option>
+                            <option value="1">John Smith</option>
+                            <option value="2">Sarah Wilson</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Doctor</label>
+                        <select required>
+                            <option value="">Select Doctor</option>
+                            <option value="1">Dr. Johnson</option>
+                            <option value="2">Dr. Brown</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Appointment Type</label>
+                    <select required>
+                        <option value="">Select Type</option>
+                        <option value="checkup">General Checkup</option>
+                        <option value="consultation">Consultation</option>
+                        <option value="followup">Follow-up</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea placeholder="Additional notes..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn" onclick="closeModal('appointmentModal')">Cancel</button>
+                    <button type="submit" class="primary-btn">Schedule Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/appointments.js"></script>
+    <script src="js/patients.js"></script>
+    <script src="js/billing.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/staff.js"></script>
+    <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyB6oEuR6J9uRc_xrmoysdPPCuYj5fpDuaA",
+    authDomain: "clinic-ea02c.firebaseapp.com",
+    projectId: "clinic-ea02c",
+    storageBucket: "clinic-ea02c.firebasestorage.app",
+    messagingSenderId: "173891223461",
+    appId: "1:173891223461:web:7821ca0df85bcd3c44724c",
+    measurementId: "G-TGTJJZNJLC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+  </body>
+</html>
